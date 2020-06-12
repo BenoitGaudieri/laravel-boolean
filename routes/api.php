@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+// namespace because it's not in the Controllers dir but in a folder
+Route::namespace("Api")->group(function(){
+    
+    Route::post("students/genders", "StudentController@gender");
 });

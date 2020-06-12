@@ -8,6 +8,7 @@ class StudentController extends Controller
 {
 
     private $students;
+    private $genders;
 
     public function __construct() {
         // $this->students = [
@@ -33,7 +34,10 @@ class StudentController extends Controller
         //     ],...
         // ];
 
-        $this->students = config("students");
+        // import the config->students.php from the "students" key and assign to $this->students
+        $this->students = config("students.students");
+        // assign genders to config->students.php with key genders
+        $this->genders = config("students.genders");
 
     }
 
@@ -47,18 +51,42 @@ class StudentController extends Controller
 
         // return view("students.index", $data);
 
+        // assign $students to the $this->students array (from the config file)
         $students = $this->students;
+        $genders = $this->genders;
+
+        // not working
+        // $data = [
+        //     "students" => $this->students,
+        //     "genders" => $this->genders,
+
+        // ];
 
         // dd( config("app.name"));
 
 
-        return view("students.index", compact("students"));
+        // send the array to the view page
+        return view("students.index", compact("students", "genders"));
     }
 
-    //show
-    public function show($id){
+    //single student details show page
+    // public function show($id){
 
-        $student = $this->searchStudent($id, $this->students);
+    //     // check if the student id exists
+    //     $student = $this->searchStudent($id, $this->students);
+
+    //     if (! $student) {
+    //         abort("404");
+    //     }
+    //     return view("students.show", compact("student"));
+        
+    // }
+
+    // show with slug
+    public function show($slug){
+
+        // check if the student id exists
+        $student = $this->searchStudent($slug, $this->students);
 
         if (! $student) {
             abort("404");
@@ -71,10 +99,21 @@ class StudentController extends Controller
      * Utilities
      */
 
-    //  Check if student exist by id
-    private function searchStudent($id, $array) {
+    //  Check if student exists by id and return the array with that id
+    // private function searchStudent($id, $array) {
+    //     foreach ($array as $student) {
+    //         if($student["id"] == $id) {
+    //             return $student;
+    //         }
+    //     }
+    //     return false;
+
+    // }
+
+    // check if student exists by slug and return the student
+    private function searchStudent($slug, $array) {
         foreach ($array as $student) {
-            if($student["id"] == $id) {
+            if($student["slug"] == $slug) {
                 return $student;
             }
         }
